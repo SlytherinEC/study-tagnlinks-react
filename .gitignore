@@ -1,0 +1,51 @@
+# .gitignore para el proyecto TagNLink
+# Estructura:
+# /Backend     => Node.js (Express)
+# /TagNLink    => React (Vite)
+# Repositorio iniciado en la raíz
+
+# ================================
+# Ignorar carpetas de dependencias
+# ================================
+/Backend/node_modules
+/TagNLink/node_modules
+
+# ============================
+# Ignorar archivos de entorno
+# ============================
+/Backend/.env
+/TagNLink/.env
+
+# ============================
+# Ignorar salidas de compilación
+# ============================
+/Backend/dist
+/Backend/build
+/TagNLink/dist
+/TagNLink/build
+
+# ===================================
+# Logs y temporales (Node.js, Vite)
+# ===================================
+**/*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.vite
+
+# ============================
+# IDEs / Sistemas operativos
+# ============================
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# ============================
+# Otros
+# ============================
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
