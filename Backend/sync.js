@@ -1,19 +1,22 @@
 // Backend/sync.js
 
 const sequelize = require('./config/database');
-const Usuario = require('./models/Usuario');
-const Enlace = require('./models/Enlace');
-const Categoria = require('./models/Categoria')
+const { Usuario, Enlace, Categoria } = require('./models');
 
-async function syncModels() {
+async function syncDatabase() {
   try {
-    await sequelize.sync({ alter: true }); // Crea o actualiza las tablas
-    console.log('✅ Modelos sincronizados con la base de datos.');
+    await sequelize.authenticate();
+    console.log('✅ Conexión con la base de datos establecida con éxito.');
+
+    // Sincroniza todos los modelos
+    await sequelize.sync({ alter: true });
+    console.log('✅ Modelos sincronizados correctamente con la base de datos.');
+
+    process.exit(); // Termina el proceso
   } catch (error) {
-    console.error('❌ Error al sincronizar modelos:', error);
-  } finally {
-    await sequelize.close();
+    console.error('❌ Error al conectar o sincronizar:', error);
+    process.exit(1);
   }
 }
 
-syncModels();
+syncDatabase();

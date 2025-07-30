@@ -1,4 +1,5 @@
 // Backend/test-connection.js
+// Este archivo es para pruebas locales, no subir a Github ni producción
 const sequelize = require('./config/database');
 
 async function testConnection() {
