@@ -3,14 +3,15 @@
 const bcrypt = require('bcrypt'); // ✅ Usamos el paquete oficial bcrypt
 const jwt = require('jsonwebtoken');
 const { Usuario } = require('../models'); // Sequelize ya importa todos los modelos desde index.js
+const { generarToken } = require('../utils/token'); // Importamos la función para generar el token
 
 // Función para registrar un nuevo usuario
 exports.registrar = async (req, res) => {
   try {
-    const { nombre, email, password } = req.body;
+    const { email, password } = req.body;
 
     // Validaciones básicas
-    if (!nombre || !email || !password) {
+    if (!email || !password) {
       return res.status(400).json({ error: 'Todos los campos son obligatorios.' });
     }
 
@@ -26,23 +27,17 @@ exports.registrar = async (req, res) => {
 
     // Crear el usuario en la base de datos
     const nuevoUsuario = await Usuario.create({
-      nombre,
       email,
       password: hashedPassword,
     });
 
-    // Generar token JWT
-    const token = jwt.sign(
-      { id: nuevoUsuario.id, email: nuevoUsuario.email },
-      process.env.JWT_SECRET,
-      { expiresIn: '24h' }
-    );
+    // Generar token JWT usando la función del archivo utils/token.js
+    const token = generarToken(nuevoUsuario);
 
     res.status(201).json({
       message: 'Usuario registrado correctamente',
       user: {
         id: nuevoUsuario.id,
-        nombre: nuevoUsuario.nombre,
         email: nuevoUsuario.email,
       },
       token,
@@ -75,12 +70,8 @@ exports.login = async (req, res) => {
       return res.status(401).json({ error: 'Credenciales incorrectas.' });
     }
 
-    // Generar JWT si es válido
-    const token = jwt.sign(
-      { id: usuario.id, email: usuario.email },
-      process.env.JWT_SECRET,
-      { expiresIn: '24h' }
-    );
+    // Generaramos el token si es válido usando la función de utils/token.js
+    const token = generarToken(usuario);
 
     res.json({
       message: 'Inicio de sesión exitoso',
